@@ -64,6 +64,15 @@ static void MX_USART6_UART_Init(void);
   * @brief  The application entry point.
   * @retval int
   */
+
+void bootloader_uart_read_data(void){
+
+}
+
+void bootloader_jump_to_user_app(void){
+
+}
+
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -90,19 +99,37 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_USART6_UART_Init();
+
   /* USER CODE BEGIN 2 */
-  char someData[] = "Hell this is a test \r\n";
+  char someData[] = "BUTTON PRESSED \r\n";
+  char notPress[] = "not pressed\r\n";
+
+  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_SET) { //Not Pressed
+  		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+  		HAL_UART_Transmit(&huart2, (uint8_t*)notPress, sizeof(notPress), HAL_MAX_DELAY);
+  		bootloader_jump_to_user_app();
+  } else { //Is Pressed
+  		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+  		HAL_UART_Transmit(&huart2, (uint8_t*)someData, sizeof(someData), HAL_MAX_DELAY);
+  		bootloader_uart_read_data();
+  }
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    /* USER CODE END WHILE */
-	  HAL_UART_Transmit(&huart2, (uint8_t*)someData, sizeof(someData), HAL_MAX_DELAY);
-	  HAL_Delay(500);
-    /* USER CODE BEGIN 3 */
-  }
+//  while (1)
+//  {
+//    /* USER CODE END WHILE */
+//	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_SET) {
+//		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+//		  HAL_UART_Transmit(&huart2, (uint8_t*)notPress, sizeof(notPress), HAL_MAX_DELAY);
+//	  } else {
+//		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+//		  HAL_UART_Transmit(&huart2, (uint8_t*)someData, sizeof(someData), HAL_MAX_DELAY);
+//	  }
+//    /* USER CODE BEGIN 3 */
+//  }
   /* USER CODE END 3 */
 }
 

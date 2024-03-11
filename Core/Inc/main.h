@@ -72,7 +72,8 @@ void Error_Handler(void);
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
-
+void bootloader_uart_read_data(void);
+void bootloader_jump_to_user_app(void);
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
