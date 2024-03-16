@@ -101,16 +101,16 @@ int main(void)
   MX_USART6_UART_Init();
 
   /* USER CODE BEGIN 2 */
-  char someData[] = "BUTTON PRESSED \r\n";
-  char notPress[] = "not pressed\r\n";
+  char runAppSTR[] = "JUMPING TO USER APPLICATION \r\n";
+  char runBootSTR[] = "RUNNING BOOTLOADER \r\n";
 
   if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_SET) { //Not Pressed
   		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
-  		HAL_UART_Transmit(&huart2, (uint8_t*)notPress, sizeof(notPress), HAL_MAX_DELAY);
+  		HAL_UART_Transmit(&huart2, (uint8_t*)runAppSTR, sizeof(runAppSTR), HAL_MAX_DELAY);
   		bootloader_jump_to_user_app();
-  } else { //Is Pressed
+  } else { //Is Pressed -> RUN BOOTLOADER
   		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
-  		HAL_UART_Transmit(&huart2, (uint8_t*)someData, sizeof(someData), HAL_MAX_DELAY);
+  		HAL_UART_Transmit(&huart2, (uint8_t*)runBootSTR, sizeof(runBootSTR), HAL_MAX_DELAY);
   		bootloader_uart_read_data();
   }
 
